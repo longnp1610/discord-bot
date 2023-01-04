@@ -1,9 +1,14 @@
+const webhooks = require("../../functions/webhooks");
+
 module.exports = {
-  data: {
-    name: "emoji-menu",
-  },
+  // prettier-ignore
+  data: {name: "emoji-menu",},
   async execute(interaction, client) {
-    const { channel } = interaction;
+    const { channel, guild } = interaction;
+
+    // Get the user's guild avatar not the main one
+    const userAvatar = interaction.user.displayAvatarURL();
+    const userName = interaction.member.displayName;
 
     await interaction.update({
       content: "Done",
@@ -12,8 +17,14 @@ module.exports = {
       ephemeral: true,
     });
 
-    await interaction.deleteReply();
+    const webHook = await webhooks(interaction);
 
-    await channel.send(interaction.values[0]);
+    await webHook.send({
+      content: interaction.values[0],
+      username: userName,
+      avatarURL: userAvatar,
+    });
+
+    await interaction.deleteReply();
   },
 };

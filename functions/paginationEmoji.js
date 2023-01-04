@@ -157,7 +157,6 @@ module.exports = async (interaction, embeds, rows) => {
   });
 
   collector.on("end", async () => {
-    if (flag) return;
     // await interaction.deleteReply();
   });
 };
